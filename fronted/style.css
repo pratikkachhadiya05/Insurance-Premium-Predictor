@@ -1,0 +1,125 @@
+/*
+  Pretty/expanded CSS for Insurance Premium Predictor
+  - Single-column form layout (fields stacked line-by-line)
+  - High contrast colors for accessibility
+  - Readable indentation and spacing
+*/
+
+:root {
+  --bg-page: #f3f4f6;         /* light gray page background */
+  --text: #0f172a;            /* very dark text for contrast */
+  --card: #ffffff;            /* card/background for form */
+  --muted-border: #374151;    /* input border color */
+  --accent: #0b5fff;          /* primary button color */
+  --accent-contrast: #ffffff; /* button text color */
+  --result-bg: #111827;       /*dark result background */
+}
+
+/* Page */
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  max-width: 900px;
+  margin: 24px auto;
+  padding: 24px 16px;
+  background: var(--bg-page);
+  color: var(--text);
+}
+
+h1 {
+  font-size: 2.6rem;
+  margin: 20 0 12px 0;
+  color: var(--text);
+  text-align: center;
+  
+}
+
+/* Form as a card and single-column layout */
+form {
+  display: grid;
+  grid-template-columns: 1fr;    /* stack fields vertically */
+  gap: 14px;
+  align-items: start;
+  background: var(--card);
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+}
+
+label {
+  display: block;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Inputs, selects and buttons stretch to full width */
+input,
+select,
+button {
+  font-size: 0.98rem;
+  padding: 10px 12px;
+  border: 1px solid var(--muted-border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+button:hover {
+  opacity: 0.95;
+}
+
+/* #result { */
+  /* margin-top: 16px;
+  padding: 14px;
+  border-radius: 10px;
+  /* background: var(--result-bg); */
+  /* color: #fff; */
+  /* font-weight: 600;  */
+/* } */
+
+/* #result { */
+  /* margin-top: 20px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #111827;   /* Dark background */
+  /* color:black;        White text */
+  /* font-weight: 700; */
+  /* text-align: center; */
+  /* font-size: 1.6rem; */
+  /* box-shadow: 0 4px 12px rgba(0,0,0,0.2); */ */
+/* } */
+
+
+
+.full {
+  grid-column: 1 / -1;
+}
+
+/* Responsive tweak */
+@media (min-width: 900px) {
+  body {
+    padding: 32px;
+  }
+
+  form {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+}

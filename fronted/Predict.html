@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prediction Result</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .container { max-width: 720px; margin: 40px auto; padding: 20px; }
+    .card { padding: 18px; border-radius: 8px; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
+    .row { margin-bottom:12px; }
+    .label { font-weight:600; color:#374151 }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Prediction Result</h1>
+    <div id="card" class="card">
+     <div id="no-data">No prediction found. Please make a prediction first. <a href="/">Go back</a></div> 
+        <div id="result" style="display:none">
+          <h2>
+            Predicted Category:
+            <span id="predicted"></span>
+          </h2>
+
+          <p><a href="/">Make another prediction</a></p>
+
+        </div>
+
+
+      <!-- < <div id="result" style="display:none">
+         <p><strong>Predicted category:</strong> <span id="predicted"></span></p>
+        <h3>Original input</h3>
+        <div id="input-values"></div>
+        <h3>Computed features</h3> 
+        <div id="features"></div>
+        <p><a href="/">Make another prediction</a></p>
+       </div>  -->
+
+    <!-- 
+      <div id="result" style="display:none">
+
+        <p>
+          <strong>Predicted category:</strong>
+          <span id="predicted"></span>
+        </p>
+
+        <h3>Original Input</h3>
+        <div id="input-values"></div>
+
+        <h3>Computed Features</h3>
+        <div id="features"></div> 
+
+        <p><a href="/">Make another prediction</a></p> -->
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const noData = document.getElementById('no-data');
+    const result = document.getElementById('result');
+
+    // If a result id is present in the URL, fetch the server-stored result.
+    const params = new URLSearchParams(window.location.search);
+    const rid = params.get('rid');
+
+    async function render(data) {
+      noData.style.display = 'none';
+      result.style.display = 'block';
+      document.getElementById('predicted').textContent = data.predicted_category;
+
+      const features = data.features || {};
+      const inputs = data.input || {};
+
+      const inContainer = document.getElementById('input-values');
+      inContainer.innerHTML = '';
+      for (const [k, v] of Object.entries(inputs)) {
+        const div = document.createElement('div');
+        div.className = 'row';
+        div.innerHTML = `<span class="label">${k}:</span> ${v}`;
+        inContainer.appendChild(div);
+      }
+
+      const container = document.getElementById('features');
+      container.innerHTML = '';
+      for (const [k, v] of Object.entries(features)) {
+        const div = document.createElement('div');
+        div.className = 'row';
+        div.innerHTML = `<span class="label">${k}:</span> ${v}`;
+        container.appendChild(div);
+      }
+    }
+
+    if (rid) {
+      // fetch from server
+      fetch(`/result/${rid}`).then(async (r) => {
+        if (!r.ok) throw new Error('Result not found');
+        const data = await r.json();
+        render(data);
+      }).catch(() => {
+        noData.style.display = 'block';
+        result.style.display = 'none';
+      });
+    } else {
+      // fallback to sessionStorage (older flow)
+      const raw = sessionStorage.getItem('lastPrediction');
+      if (!raw) {
+        noData.style.display = 'block';
+        result.style.display = 'none';
+      } else {
+        try {
+          const data = JSON.parse(raw);
+          render(data);
+        } catch (err) {
+          noData.style.display = 'block';
+          result.style.display = 'none';
+        }
+      }
+    }
+  </script>
+</body>
+</html>
